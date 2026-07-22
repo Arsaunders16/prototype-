@@ -1,42 +1,21 @@
 import { useState } from "react";
 
 import HomePage from "./pages/HomePage";
-import SetupPage from "./pages/SetupPage";
 import WorkspacePage from "./pages/WorkspacePage";
 
-type Screen = "home" | "setup" | "workspace";
-
 function App() {
-  const [screen, setScreen] = useState<Screen>("home");
-  const [selectedWorkflow, setSelectedWorkflow] = useState("");
+  const [selectedWorkflow, setSelectedWorkflow] = useState<string | null>(null);
 
-  if (screen === "home") {
+  if (selectedWorkflow) {
     return (
-      <HomePage
-        onSelectWorkflow={(workflow) => {
-          setSelectedWorkflow(workflow);
-          setScreen("setup");
-        }}
-      />
-    );
-  }
-
-  if (screen === "setup") {
-    return (
-      <SetupPage
+      <WorkspacePage
         workflowName={selectedWorkflow}
-        onBack={() => setScreen("home")}
-        onContinue={() => setScreen("workspace")}
+        onBack={() => setSelectedWorkflow(null)}
       />
     );
   }
 
-  return (
-    <WorkspacePage
-      workflowName={selectedWorkflow}
-      onBack={() => setScreen("home")}
-    />
-  );
+  return <HomePage onSelectWorkflow={setSelectedWorkflow} />;
 }
 
 export default App;
